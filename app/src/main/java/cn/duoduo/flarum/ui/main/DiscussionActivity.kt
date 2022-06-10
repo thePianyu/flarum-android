@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.text.HtmlCompat
@@ -54,7 +55,7 @@ class DiscussionActivity : AppCompatActivity() {
             val html = HtmlCompat.fromHtml(
                 item.attributes.contentHtml,
                 HtmlCompat.FROM_HTML_MODE_COMPACT,
-                ImageGetter(context),
+                ImageGetter(context, recyclerView.width, holder.content),
                 null
             )
             holder.content.text = html
