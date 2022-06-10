@@ -15,12 +15,7 @@ class ImageGetter(private val context: Context): Html.ImageGetter {
 
     override fun getDrawable(source: String?): Drawable {
         val drawable = LevelListDrawable()
-        Glide
-            .with(context)
-            .load(source)
-            .into(object: CustomTarget() {
-
-            })
+        return drawable
     }
 
 }
