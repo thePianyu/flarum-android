@@ -50,6 +50,15 @@ class DiscussionViewModel : ViewModel() {
                 }
 
                 val resp = RetrofitClient.flarumService.getPosts(includedPosts.toString())
+
+                for(post in resp.data){
+                    val user = resp.included.find {
+                        it.type == "users" && post.relationships.user.data.id == it.id
+                    }
+                    post.username = user!!.attributes.get("username").toString()
+                    post.avatar = user!!.attributes.get("avatarUrl").toString()
+                }
+
                 posts.postValue(resp.data!!.filter {
                     it.attributes.contentType == "comment"
                 })

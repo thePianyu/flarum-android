@@ -4,13 +4,114 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".ui.main.DiscussionActivity">
-
+        <!-- 头部 start -->
+        <ImageView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:padding="@dimen/dp_4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/btn_left_back"
+            android:contentDescription="@string/back" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:id="@+id/header_discussion"
+            app:layout_constraintStart_toEndOf="@+id/btn_left_back"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:text="@string/discussion"
+            />
+        <!-- 头部 end -->
+        <!-- 内容 start -->
+        <!-- 帖子 -->
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/header_discussion"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_replay"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <!-- 评论 -->
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/recycler_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="@dimen/dp_40"-->
+<!--            android:layout_marginBottom="@dimen/dp_40"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/title_discussion"-->
+<!--            app:layout_constraintStart_toStartOf="parent"/>-->
+        <!-- 内容 end -->
+        <!-- 底部 start -->
+        <ImageView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:padding="@dimen/dp_6"
+            android:id="@+id/icon_edit_replay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/edit" />
+        <EditText
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_40"
+            android:id="@+id/edit_replay"
+            app:layout_constraintStart_toEndOf="@id/icon_edit_replay"
+            app:layout_constraintEnd_toStartOf="@+id/icon_like"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:hint="@string/edit_hint"
+            android:textSize="@dimen/sp_10"
+            android:importantForAutofill="no"
+            android:inputType="text" />
+        <!-- 收藏点赞 start -->
+        <ImageView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:padding="@dimen/dp_6"
+            app:layout_constraintEnd_toStartOf="@id/text_num_like"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/icon_like"
+            android:contentDescription="@string/like" />
+        <TextView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            app:layout_constraintEnd_toStartOf="@id/icon_bookmark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/text_num_like"
+            android:text="666"
+            />
+        <ImageView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:padding="@dimen/dp_6"
+            app:layout_constraintEnd_toStartOf="@id/text_num_bookmark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/icon_bookmark"
+            android:contentDescription="@string/bookmark" />
+        <TextView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            app:layout_constraintEnd_toStartOf="@id/icon_share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/text_num_bookmark"
+            android:text="666"
+            />
+        <ImageView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:padding="@dimen/dp_6"
+            app:layout_constraintEnd_toStartOf="@id/text_num_share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/icon_share"
+            android:contentDescription="@string/share" />
+        <TextView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/text_num_share"
+            android:text="666"
+            />
+        <!-- 收藏点赞 end -->
+        <!-- 底部 end -->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

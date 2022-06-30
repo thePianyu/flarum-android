@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Flarum</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="discussion">问答</string>
+    <string name="edit_hint">说点什么吧…</string>
+    <string name="avatar">头像</string>
+    <string name="edit">编辑</string>
+    <string name="like">点赞</string>
+    <string name="bookmark">收藏</string>
+    <string name="share">分享</string>
+    <string name="back">返回</string>
 </resources>

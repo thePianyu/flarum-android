@@ -12,7 +12,7 @@ object RetrofitClient {
         client.create(FlarumService::class.java)
     }
 
-    private const val BASE_URL = "https://discuss.flarum.org/"
+    private const val BASE_URL = "https://pianyu.org/"
 
     private val client: Retrofit by lazy {
 
