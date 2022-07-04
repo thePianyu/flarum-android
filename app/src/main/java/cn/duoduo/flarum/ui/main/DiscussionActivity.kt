@@ -1,11 +1,18 @@
 package cn.duoduo.flarum.ui.main
 
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.text.util.Linkify
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.URLSpan
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
@@ -21,6 +28,7 @@ import cn.duoduo.flarum.viewmodel.DiscussionViewModel
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import org.jsoup.internal.StringUtil
+import retrofit2.Retrofit
 
 
 class DiscussionActivity : AppCompatActivity() {
@@ -97,16 +105,59 @@ class DiscussionActivity : AppCompatActivity() {
                 ImageGetter(context, recyclerView.width - 50, holder.content),
                 null
             )
-            holder.content.text = html
-            holder.title.text = item.username
 
-            // 加载头像
-            if (!StringUtil.isBlank(item.avatar)) {
-                ImageUtils.loadAvatar(item.avatar, holder.avatar, holder.itemView, context)
-            } else {
-                ImageUtils.setDefaultAvatar(holder.avatar, context)
+            // TODO 目前只能处理链接，还不知道图片如何处理
+            if (html is SpannableStringBuilder) {
+                val spannableStringBuilder = html as SpannableStringBuilder
+                val objs: Array<out URLSpan>? = spannableStringBuilder.getSpans(
+                    0, spannableStringBuilder.length,
+                    URLSpan::class.java
+                )
+                if (objs != null) {
+                    for (obj in objs) {
+                        val start = spannableStringBuilder.getSpanStart(obj)
+                        val end = spannableStringBuilder.getSpanEnd(obj)
+
+                        val url = obj.url
+
+                        // 先移除这个Span，再新添加一个自己实现的Span。
+                        spannableStringBuilder.removeSpan(obj)
+                        val uri = Uri.parse(url);
+                        if(!url.startsWith("https://pianyu.org/")){
+                            // 外部链接打开默认浏览器访问
+                            spannableStringBuilder.setSpan(object : ClickableSpan() {
+                                override fun onClick(widget: View) {
+                                    val defaultBrowser = Intent.makeMainSelectorActivity(
+                                        Intent.ACTION_MAIN,
+                                        Intent.CATEGORY_APP_BROWSER
+                                    )
+                                    defaultBrowser.data = uri
+                                    context.startActivity(defaultBrowser)
+                                }
+                            }, start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        }else{
+                            // TODO 内部链接跳转activity
+                            spannableStringBuilder.setSpan(object : ClickableSpan() {
+                                override fun onClick(widget: View) {
+                                    Toast.makeText(context, "test url: $url", Toast.LENGTH_SHORT).show()
+//                                    val intent = Intent(context, MainActivity::class.java)
+//                                    context.startActivity(intent)
+                                }
+                            }, start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+                        }
+                    }
+                }
+                holder.content.text = spannableStringBuilder
+                holder.content.movementMethod = LinkMovementMethod.getInstance();
+                holder.title.text = item.username
+
+                // 加载头像
+                if (!StringUtil.isBlank(item.avatar)) {
+                    ImageUtils.loadAvatar(item.avatar, holder.avatar, holder.itemView, context)
+                } else {
+                    ImageUtils.setDefaultAvatar(holder.avatar, context)
+                }
             }
-            Linkify.addLinks(holder.content, Linkify.WEB_URLS)
         }
 
     }
