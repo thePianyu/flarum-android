@@ -7,8 +7,8 @@
 
     <ImageView
             android:id="@+id/avatar"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/dp_avatar"
+            android:layout_height="@dimen/dp_avatar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:background="@drawable/shape_circle"

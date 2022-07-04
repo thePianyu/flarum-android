@@ -32,7 +32,7 @@ class ImageGetter(private val context: Context, private val width: Int, private 
                     val bitmapDrawable = resource.toDrawable(context.resources)
                     drawable.addLevel(1, 1, bitmapDrawable)
                     val scale = resource.height.toDouble() / resource.width.toDouble()
-                    val imgHeight = scale * resource.height
+                    val imgHeight = scale * width
                     val imgWidth = width
                     drawable.setBounds(0, 0, imgWidth, imgHeight.toInt())
                     drawable.level = 1

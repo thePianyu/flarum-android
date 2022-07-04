@@ -94,7 +94,7 @@ class DiscussionActivity : AppCompatActivity() {
             val html = HtmlCompat.fromHtml(
                 item.attributes.contentHtml,
                 HtmlCompat.FROM_HTML_MODE_COMPACT,
-                ImageGetter(context, recyclerView.width, holder.content),
+                ImageGetter(context, recyclerView.width - 50, holder.content),
                 null
             )
             holder.content.text = html
