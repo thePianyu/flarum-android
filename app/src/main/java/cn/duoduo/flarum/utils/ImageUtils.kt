@@ -34,6 +34,11 @@ object ImageUtils {
      * glide加载头像
      */
     fun loadAvatar(url: String?, view: ImageView, parent: View, context: Context){
+
+        if(url.isNullOrEmpty()){
+            setDefaultAvatar(view, context)
+        }
+
         Glide.with(parent)
             .load(url)
             .apply(

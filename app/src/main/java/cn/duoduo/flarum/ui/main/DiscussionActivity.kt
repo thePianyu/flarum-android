@@ -1,13 +1,17 @@
 package cn.duoduo.flarum.ui.main
 
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.style.ImageSpan
 import android.text.style.URLSpan
 import android.view.View
 import android.widget.ImageView
@@ -28,7 +32,7 @@ import cn.duoduo.flarum.viewmodel.DiscussionViewModel
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import org.jsoup.internal.StringUtil
-import retrofit2.Retrofit
+import org.xml.sax.XMLReader
 
 
 class DiscussionActivity : AppCompatActivity() {
@@ -103,10 +107,9 @@ class DiscussionActivity : AppCompatActivity() {
                 item.attributes.contentHtml,
                 HtmlCompat.FROM_HTML_MODE_COMPACT,
                 ImageGetter(context, recyclerView.width - 50, holder.content),
-                null
+                UrlTagHandler(context)
             )
 
-            // TODO 目前只能处理链接，还不知道图片如何处理
             if (html is SpannableStringBuilder) {
                 val spannableStringBuilder = html as SpannableStringBuilder
                 val objs: Array<out URLSpan>? = spannableStringBuilder.getSpans(
@@ -140,7 +143,7 @@ class DiscussionActivity : AppCompatActivity() {
                             spannableStringBuilder.setSpan(object : ClickableSpan() {
                                 override fun onClick(widget: View) {
                                     Toast.makeText(context, "test url: $url", Toast.LENGTH_SHORT).show()
-//                                    val intent = Intent(context, MainActivity::class.java)
+//                                    val intent = Intent(context, UserSpace::class.java)
 //                                    context.startActivity(intent)
                                 }
                             }, start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
@@ -160,6 +163,63 @@ class DiscussionActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    /**
+     * 处理图片
+     */
+    private class UrlTagHandler(context: Context): Html.TagHandler {
+
+        private var context: Context
+
+        init {
+            this.context = context.applicationContext
+        }
+
+        override fun handleTag(
+            opening: Boolean,
+            tag: String?,
+            output: Editable?,
+            xmlReader: XMLReader?
+        ) {
+            if (tag != null) {
+                // 处理标签<img>
+                if (tag.lowercase() == "img") {
+                    // 获取长度
+                    val len: Int = output!!.length
+                    // 获取图片地址
+                    val images = output.getSpans(len - 1, len, ImageSpan::class.java)
+                    for (img in images) {
+                        val imgURL = img.source
+                        // 使图片可点击并监听点击事件
+                        output.setSpan(
+                            ClickableImage(context, imgURL!!),
+                            len - 1,
+                            len,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                }
+            }
+        }
+        /**
+         * 图片点击
+         */
+        private class ClickableImage(context: Context, url: String) : ClickableSpan() {
+
+            private val url: String
+            private val context: Context
+
+            init {
+                this.context = context
+                this.url = url
+            }
+
+            override fun onClick(widget: View) {
+                // TODO 进行图片点击之后的处理
+                Toast.makeText(context, "Image source: $url", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 }
