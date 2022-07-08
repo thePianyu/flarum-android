@@ -41,12 +41,7 @@ object ImageUtils {
 
         Glide.with(parent)
             .load(url)
-            .apply(
-                RequestOptions()
-                    .circleCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                    .skipMemoryCache(false)
-            )
+            .circleCrop()
             .override(100, 100)
             .addListener(object : RequestListener<Drawable?> {
                 override fun onResourceReady(
