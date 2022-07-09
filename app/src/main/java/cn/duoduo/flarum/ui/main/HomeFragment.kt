@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cn.duoduo.flarum.R
 import cn.duoduo.flarum.databinding.HomeFragmentBinding
 import cn.duoduo.flarum.api.models.Discussion
-import cn.duoduo.flarum.ui.DiscussionActivity
+import cn.duoduo.flarum.ui.discussion.DiscussionActivity
 import cn.duoduo.flarum.utils.ImageUtils
 import cn.duoduo.flarum.viewmodel.HomeViewModel
 import com.chad.library.adapter.base.BaseQuickAdapter

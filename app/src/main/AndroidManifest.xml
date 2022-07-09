@@ -17,7 +17,7 @@
                 android:exported="false"/>
 
         <activity
-                android:name=".ui.DiscussionActivity"
+                android:name=".ui.discussion.DiscussionActivity"
                 android:exported="false"/>
 
         <activity
