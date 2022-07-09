@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.duoduo.flarum.api.models.Discussion
 import cn.duoduo.flarum.api.models.Post
-import cn.duoduo.flarum.api.models.PostAttributes
 import cn.duoduo.flarum.network.RetrofitClient
 import kotlinx.coroutines.launch
 
@@ -44,7 +43,7 @@ class DiscussionViewModel : ViewModel() {
                     size = discussion.value!!.relationships.posts.data.size - offset
 
                 for (post in discussion.value!!.relationships.posts.data.subList(
-                    offset, size
+                    offset, size + offset
                 )) {
                     includedPosts.append(post.id).append(",")
                 }

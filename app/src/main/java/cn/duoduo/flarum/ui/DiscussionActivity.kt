@@ -1,4 +1,4 @@
-package cn.duoduo.flarum.ui.main
+package cn.duoduo.flarum.ui
 
 
 import android.content.Context
@@ -111,24 +111,23 @@ class DiscussionActivity : AppCompatActivity() {
             )
 
             if (html is SpannableStringBuilder) {
-                val spannableStringBuilder = html as SpannableStringBuilder
-                val objs: Array<out URLSpan>? = spannableStringBuilder.getSpans(
-                    0, spannableStringBuilder.length,
+                val objs: Array<out URLSpan>? = html.getSpans(
+                    0, html.length,
                     URLSpan::class.java
                 )
                 if (objs != null) {
                     for (obj in objs) {
-                        val start = spannableStringBuilder.getSpanStart(obj)
-                        val end = spannableStringBuilder.getSpanEnd(obj)
+                        val start = html.getSpanStart(obj)
+                        val end = html.getSpanEnd(obj)
 
                         val url = obj.url
 
                         // 先移除这个Span，再新添加一个自己实现的Span。
-                        spannableStringBuilder.removeSpan(obj)
-                        val uri = Uri.parse(url);
-                        if(!url.startsWith("https://pianyu.org/")){
+                        html.removeSpan(obj)
+                        val uri = Uri.parse(url)
+                        if (!url.startsWith("https://pianyu.org/")) {
                             // 外部链接打开默认浏览器访问
-                            spannableStringBuilder.setSpan(object : ClickableSpan() {
+                            html.setSpan(object : ClickableSpan() {
                                 override fun onClick(widget: View) {
                                     val defaultBrowser = Intent.makeMainSelectorActivity(
                                         Intent.ACTION_MAIN,
@@ -138,9 +137,9 @@ class DiscussionActivity : AppCompatActivity() {
                                     context.startActivity(defaultBrowser)
                                 }
                             }, start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-                        }else{
+                        } else {
                             // TODO 内部链接跳转activity
-                            spannableStringBuilder.setSpan(object : ClickableSpan() {
+                            html.setSpan(object : ClickableSpan() {
                                 override fun onClick(widget: View) {
                                     Toast.makeText(context, "test url: $url", Toast.LENGTH_SHORT).show()
 //                                    val intent = Intent(context, UserSpace::class.java)
@@ -150,8 +149,8 @@ class DiscussionActivity : AppCompatActivity() {
                         }
                     }
                 }
-                holder.content.text = spannableStringBuilder
-                holder.content.movementMethod = LinkMovementMethod.getInstance();
+                holder.content.text = html
+                holder.content.movementMethod = LinkMovementMethod.getInstance()
                 holder.title.text = item.username
 
                 // 加载头像
@@ -168,13 +167,7 @@ class DiscussionActivity : AppCompatActivity() {
     /**
      * 处理图片
      */
-    private class UrlTagHandler(context: Context): Html.TagHandler {
-
-        private var context: Context
-
-        init {
-            this.context = context.applicationContext
-        }
+    private class UrlTagHandler(val context: Context): Html.TagHandler {
 
         override fun handleTag(
             opening: Boolean,
@@ -205,19 +198,13 @@ class DiscussionActivity : AppCompatActivity() {
         /**
          * 图片点击
          */
-        private class ClickableImage(context: Context, url: String) : ClickableSpan() {
+        private class ClickableImage(private val context: Context, private val url: String) : ClickableSpan() {
 
-            private val url: String
-            private val context: Context
-
-            init {
-                this.context = context
-                this.url = url
-            }
 
             override fun onClick(widget: View) {
-                // TODO 进行图片点击之后的处理
-                Toast.makeText(context, "Image source: $url", Toast.LENGTH_LONG).show()
+                val intent = Intent(context, ImageActivity::class.java)
+                intent.putExtra("URL", url)
+                context.startActivity(intent)
             }
         }
     }

@@ -3,7 +3,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.main.DiscussionActivity">
+            tools:context=".ui.DiscussionActivity">
         <!-- 头部 start -->
         <ImageView
             android:layout_width="@dimen/dp_40"
