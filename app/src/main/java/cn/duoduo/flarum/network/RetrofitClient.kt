@@ -17,6 +17,7 @@ object RetrofitClient {
     private val client: Retrofit by lazy {
 
         val okHttp = OkHttpClient.Builder()
+            .addInterceptor(LoginInterceptor())
             .addInterceptor(HttpLoggingInterceptor())
             .build()
 
