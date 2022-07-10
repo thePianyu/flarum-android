@@ -22,12 +22,13 @@ import cn.duoduo.flarum.ui.ImageActivity
 import cn.duoduo.flarum.utils.ImageGetter
 import cn.duoduo.flarum.utils.ImageUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import org.jsoup.internal.StringUtil
 import org.xml.sax.XMLReader
 
 
-class Adapter : BaseQuickAdapter<Post, Adapter.ViewHolder>(R.layout.item_post) {
+class Adapter : BaseQuickAdapter<Post, Adapter.ViewHolder>(R.layout.item_post), LoadMoreModule {
 
     class ViewHolder(itemView: View) : BaseViewHolder(itemView) {
         val content: TextView = itemView.findViewById(R.id.content)

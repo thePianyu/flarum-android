@@ -36,6 +36,11 @@ class DiscussionActivity : AppCompatActivity() {
         val adapter = Adapter()
         adapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.AlphaIn)
 
+        // 加载更多
+        adapter.loadMoreModule.setOnLoadMoreListener {
+            model.fetchPosts(offset)
+        }
+
         // 设置标题
         val view = layoutInflater.inflate(R.layout.item_post_header, binding.recyclerView, false)
         val title = intent.getStringExtra("discussionTitle")!!
@@ -54,6 +59,7 @@ class DiscussionActivity : AppCompatActivity() {
         model.getPosts().observe(this) {
             offset += it.size
             adapter.addData(it)
+            adapter.loadMoreModule.loadMoreComplete()
         }
 
         // 分割线
@@ -82,7 +88,7 @@ class DiscussionActivity : AppCompatActivity() {
         binding.fabShare.setOnClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "${RetrofitClient.BASE_URL}/d/${intent.getStringExtra("ID")!!}")
+                putExtra(Intent.EXTRA_TEXT, "${RetrofitClient.BASE_URL}d/${intent.getStringExtra("ID")!!}")
                 type = "text/plain"
             }
             val shareIntent = Intent.createChooser(sendIntent, null)
