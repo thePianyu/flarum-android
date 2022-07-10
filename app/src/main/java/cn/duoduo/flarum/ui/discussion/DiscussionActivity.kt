@@ -1,40 +1,21 @@
 package cn.duoduo.flarum.ui.discussion
 
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.Html
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.ImageSpan
-import android.text.style.URLSpan
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.duoduo.flarum.R
-import cn.duoduo.flarum.api.models.Post
 import cn.duoduo.flarum.databinding.ActivityDiscussionBinding
-import cn.duoduo.flarum.ui.ImageActivity
-import cn.duoduo.flarum.utils.ImageGetter
-import cn.duoduo.flarum.utils.ImageUtils
+import cn.duoduo.flarum.network.RetrofitClient
 import cn.duoduo.flarum.viewmodel.DiscussionViewModel
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import org.jsoup.internal.StringUtil
-import org.xml.sax.XMLReader
 
 
 class DiscussionActivity : AppCompatActivity() {
@@ -96,6 +77,21 @@ class DiscussionActivity : AppCompatActivity() {
                 binding.fabShare.animate().translationY(0F).withEndAction { binding.fabShare.visibility = View.GONE }
             }
             fabOpened = !fabOpened
+        }
+
+        binding.fabShare.setOnClickListener {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "${RetrofitClient.BASE_URL}/d/${intent.getStringExtra("ID")!!}")
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+        }
+
+        binding.fabReply.setOnClickListener {
+            val modalBottomSheet = ReplyBottomSheet()
+            modalBottomSheet.show(supportFragmentManager, ReplyBottomSheet.TAG)
         }
     }
 

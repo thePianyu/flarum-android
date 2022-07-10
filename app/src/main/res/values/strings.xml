@@ -10,4 +10,6 @@
     <string name="bookmark">收藏</string>
     <string name="share">分享</string>
     <string name="back">返回</string>
+    <string name="reply">回复</string>
+    <string name="submit">发布</string>
 </resources>
