@@ -1,9 +1,9 @@
 package cn.duoduo.flarum.api
 
-import cn.duoduo.flarum.api.models.BaseResponse
-import cn.duoduo.flarum.api.models.Discussion
-import cn.duoduo.flarum.api.models.Post
+import cn.duoduo.flarum.api.models.*
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -23,5 +23,10 @@ interface FlarumService {
     suspend fun getPosts(
         @Query("filter[id]") idFilter: String = ""
     ): BaseResponse<List<Post>>
+
+    @POST("/api/token")
+    suspend fun login(
+        @Body body: LoginRequest
+    ): LoginResponse
 
 }

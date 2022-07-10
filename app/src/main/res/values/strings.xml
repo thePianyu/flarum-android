@@ -12,4 +12,9 @@
     <string name="back">返回</string>
     <string name="reply">回复</string>
     <string name="submit">发布</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="login_success">登录成功</string>
 </resources>
