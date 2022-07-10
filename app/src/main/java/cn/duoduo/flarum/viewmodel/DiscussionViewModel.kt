@@ -26,9 +26,7 @@ class DiscussionViewModel : ViewModel() {
         }
     }
 
-    private val posts: MutableLiveData<List<Post>> = MutableLiveData<List<Post>>().also {
-        it.value = ArrayList()
-    }
+    private val posts: MutableLiveData<List<Post>> = MutableLiveData<List<Post>>()
 
     fun getPosts(): LiveData<List<Post>> = posts
 

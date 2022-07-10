@@ -60,6 +60,8 @@ class DiscussionActivity : AppCompatActivity() {
             offset += it.size
             adapter.addData(it)
             adapter.loadMoreModule.loadMoreComplete()
+            if (it.isEmpty())
+                adapter.loadMoreModule.loadMoreEnd()
         }
 
         // 分割线
