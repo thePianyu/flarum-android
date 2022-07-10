@@ -21,6 +21,7 @@
     >
 
         <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_content"
                 android:gravity="top|start"
                 android:minHeight="@dimen/dp_100"
                 android:layout_width="match_parent"

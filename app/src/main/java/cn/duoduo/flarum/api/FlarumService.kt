@@ -29,4 +29,9 @@ interface FlarumService {
         @Body body: LoginRequest
     ): LoginResponse
 
+    @POST("/api/posts")
+    suspend fun submitPost(
+        @Body body: BaseRequest<PostRequestData>
+    ): BaseResponse<Post>
+
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -22,6 +23,8 @@ class DiscussionActivity : AppCompatActivity() {
 
     private val model: DiscussionViewModel by viewModels()
     private var offset = 0
+
+    private lateinit var replyBottomSheet: ReplyBottomSheet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +64,16 @@ class DiscussionActivity : AppCompatActivity() {
             adapter.addData(it)
             adapter.loadMoreModule.loadMoreComplete()
             if (it.isEmpty())
-                adapter.loadMoreModule.loadMoreEnd()
+                adapter.loadMoreModule.loadMoreEnd(true)
+        }
+
+        model.getSubmitPost().observe(this) {
+            if (it == null) {
+                Toast.makeText(this, "发布成功", Toast.LENGTH_SHORT).show()
+                replyBottomSheet.dismiss()
+            } else {
+                Toast.makeText(this, "发布失败: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // 分割线
@@ -87,6 +99,7 @@ class DiscussionActivity : AppCompatActivity() {
             fabOpened = !fabOpened
         }
 
+        // 分享
         binding.fabShare.setOnClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
@@ -97,9 +110,15 @@ class DiscussionActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
 
+        // 发布Post
+        replyBottomSheet = ReplyBottomSheet(object : ReplyBottomSheet.OnClickListener {
+            override fun onSubmit(content: String) {
+                model.submitPost(content)
+            }
+        })
+
         binding.fabReply.setOnClickListener {
-            val modalBottomSheet = ReplyBottomSheet()
-            modalBottomSheet.show(supportFragmentManager, ReplyBottomSheet.TAG)
+            replyBottomSheet.show(supportFragmentManager, ReplyBottomSheet.TAG)
         }
     }
 
