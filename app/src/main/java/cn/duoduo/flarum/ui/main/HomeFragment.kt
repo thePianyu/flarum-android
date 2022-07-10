@@ -73,7 +73,7 @@ class HomeFragment : Fragment() {
             holder.title.text = item.attributes.title
 
             // 内容
-            val doc = Jsoup.parse(item.firstPostContent)
+            val doc = Jsoup.parse(item.includedFirstPost!!.contentHtml)
             holder.content.text = doc.body().text()
 
             // 标签

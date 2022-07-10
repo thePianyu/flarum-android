@@ -6,7 +6,7 @@ data class Discussion(
     val attributes: DiscussionAttributes,
     val relationships: Relationships
 ) {
-    var firstPostContent: String = "" // 第一个post的正文
+    var includedFirstPost: PostAttributes? = null
     var tags: MutableList<TagAttributes> = ArrayList() // 相关标签
     var avatar: String = ""
 }

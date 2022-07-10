@@ -37,10 +37,10 @@ class DiscussionViewModel : ViewModel() {
                 val includedPosts = StringBuilder()
 
                 var size = 20
-                if (size + offset > discussion.value!!.relationships.posts.data.size)
-                    size = discussion.value!!.relationships.posts.data.size - offset
+                if (size + offset > discussion.value!!.relationships.posts!!.data.size)
+                    size = discussion.value!!.relationships.posts!!.data.size - offset
 
-                for (post in discussion.value!!.relationships.posts.data.subList(
+                for (post in discussion.value!!.relationships.posts!!.data.subList(
                     offset, size + offset
                 )) {
                     includedPosts.append(post.id).append(",")
@@ -50,7 +50,7 @@ class DiscussionViewModel : ViewModel() {
 
                 for(post in resp.data){
                     val user = resp.included.find {
-                        it.type == "users" && post.relationships.user.data.id == it.id
+                        it.type == "users" && post.relationships.user!!.data.id == it.id
                     }
                     post.username = user!!.attributes.get("username").toString()
                     post.avatar = user!!.attributes.get("avatarUrl").toString()
