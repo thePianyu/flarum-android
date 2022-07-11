@@ -1,6 +1,5 @@
 package cn.duoduo.flarum.viewmodel
 
-import android.os.Build
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import cn.duoduo.flarum.api.models.Discussion
 import cn.duoduo.flarum.api.models.PostAttributes
 import cn.duoduo.flarum.api.models.TagAttributes
+import cn.duoduo.flarum.api.models.UserAttributes
 import cn.duoduo.flarum.network.RetrofitClient
 import kotlinx.coroutines.launch
 
@@ -53,12 +53,13 @@ class HomeViewModel : ViewModel() {
                     val includedUser = resp.included.find { include ->
                         include.type == it.relationships.user!!.data.type && include.id == it.relationships.user.data.id
                     }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        val avatar = includedUser!!.attributes.get("avatarUrl")
-                        if(avatar != null){
-                            it.avatar = avatar as String
-                        }
-                    }
+                    it.user = UserAttributes(
+                        (includedUser!!.attributes["username"] ?: "") as String,
+                        (includedUser!!.attributes["displayName"] ?: "") as String,
+                        (includedUser!!.attributes["avatarUrl"] ?: "") as String,
+                        (includedUser!!.attributes["joinTime"] ?: "") as String,
+                        (includedUser!!.attributes["lastSeenAt"] ?: "") as String,
+                    )
                 }
 
                 discussions.postValue(resp.data!!)

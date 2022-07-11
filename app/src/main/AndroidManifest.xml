@@ -12,8 +12,12 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Flarum">
         <activity
+                android:theme="@style/Theme.Flarum.NoActionBar"
+                android:name=".ui.UserSpaceActivity"
+                android:exported="false"/>
+        <activity
                 android:name=".ui.LoginActivity"
-                android:exported="true"/>
+                android:exported="false"/>
         <activity
                 android:name=".ui.ImageActivity"
                 android:exported="false"/>

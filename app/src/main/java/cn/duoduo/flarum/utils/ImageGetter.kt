@@ -2,19 +2,13 @@ package cn.duoduo.flarum.utils
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LevelListDrawable
 import android.text.Html
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.text.HtmlCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.CustomViewTarget
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 
 class ImageGetter(private val context: Context, private val width: Int, private val textView: TextView) : Html.ImageGetter {

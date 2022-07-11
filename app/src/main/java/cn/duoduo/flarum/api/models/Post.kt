@@ -6,6 +6,6 @@ data class Post(
     val attributes: PostAttributes,
     val relationships: Relationships
 ){
-    var username: String = ""
-    var avatar: String = ""
+    var user: UserAttributes? = null
+    var userId: String = ""
 }

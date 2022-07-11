@@ -70,4 +70,11 @@ dependencies {
 
     // https://mvnrepository.com/artifact/junit/junit
     testImplementation 'junit:junit:4.13.2'
+
+    // leakcanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
+
+    // blur
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+    implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
 }

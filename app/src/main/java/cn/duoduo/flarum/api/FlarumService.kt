@@ -34,4 +34,9 @@ interface FlarumService {
         @Body body: BaseRequest<PostRequestData>
     ): BaseResponse<Post>
 
+    @GET("/api/users/{id}")
+    suspend fun getUser(
+        @Path("id") id: String
+    ): BaseResponse<User>
+
 }

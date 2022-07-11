@@ -8,5 +8,5 @@ data class Discussion(
 ) {
     var includedFirstPost: PostAttributes? = null
     var tags: MutableList<TagAttributes> = ArrayList() // 相关标签
-    var avatar: String = ""
+    var user: UserAttributes? = null
 }

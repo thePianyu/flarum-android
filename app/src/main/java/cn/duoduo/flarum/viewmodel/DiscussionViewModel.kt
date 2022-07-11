@@ -54,11 +54,17 @@ class DiscussionViewModel : ViewModel() {
                 val resp = RetrofitClient.flarumService.getPosts(includedPosts.toString())
 
                 for (post in resp.data) {
-                    val user = resp.included.find {
+                    val includedUser = resp.included.find {
                         it.type == "users" && post.relationships.user!!.data.id == it.id
                     }
-                    post.username = user!!.attributes.get("username").toString()
-                    post.avatar = user!!.attributes.get("avatarUrl").toString()
+                    post.user = UserAttributes(
+                        (includedUser!!.attributes["username"] ?: "") as String,
+                        (includedUser!!.attributes["displayName"] ?: "") as String,
+                        (includedUser!!.attributes["avatarUrl"] ?: "") as String,
+                        (includedUser!!.attributes["joinTime"] ?: "") as String,
+                        (includedUser!!.attributes["lastSeenAt"] ?: "") as String,
+                    )
+                    post.userId = includedUser.id
                 }
 
                 posts.postValue(resp.data!!.filter {
@@ -86,11 +92,16 @@ class DiscussionViewModel : ViewModel() {
                 )
                 posts.postValue(ArrayList<Post>().also {
                     val post = resp.data
-                    val user = resp.included.find { include ->
+                    val includedUser = resp.included.find { include ->
                         include.type == "users" && post.relationships.user!!.data.id == include.id
                     }
-                    post.username = user!!.attributes.get("username").toString()
-                    post.avatar = user!!.attributes.get("avatarUrl").toString()
+                    post.user = UserAttributes(
+                        (includedUser!!.attributes["username"] ?: "") as String,
+                        (includedUser.attributes["displayName"] ?: "") as String,
+                        (includedUser.attributes["avatarUrl"] ?: "") as String,
+                        (includedUser.attributes["joinTime"] ?: "") as String,
+                        (includedUser.attributes["lastSeenAt"] ?: "") as String,
+                    )
                     it.add(post)
                 })
                 submitPost.postValue(null)

@@ -33,16 +33,15 @@ object ImageUtils {
     /**
      * glide加载头像
      */
-    fun loadAvatar(url: String?, view: ImageView, parent: View, context: Context){
+    fun loadAvatar(url: String?, view: ImageView, context: Context) {
 
-        if(url.isNullOrEmpty()){
+        if (url.isNullOrEmpty()) {
             setDefaultAvatar(view, context)
         }
 
-        Glide.with(parent)
+        Glide.with(context)
             .load(url)
             .circleCrop()
-            .override(100, 100)
             .addListener(object : RequestListener<Drawable?> {
                 override fun onResourceReady(
                     resource: Drawable?,

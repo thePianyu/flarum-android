@@ -1,4 +1,4 @@
-package cn.duoduo.flarum.ui.discussion
+package cn.duoduo.flarum.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -19,16 +19,18 @@ import androidx.core.text.HtmlCompat
 import cn.duoduo.flarum.R
 import cn.duoduo.flarum.api.models.Post
 import cn.duoduo.flarum.ui.ImageActivity
+import cn.duoduo.flarum.ui.UserSpaceActivity
+import cn.duoduo.flarum.ui.discussion.DiscussionActivity
 import cn.duoduo.flarum.utils.ImageGetter
 import cn.duoduo.flarum.utils.ImageUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import org.jsoup.internal.StringUtil
 import org.xml.sax.XMLReader
+import java.util.regex.Pattern
 
 
-class Adapter : BaseQuickAdapter<Post, Adapter.ViewHolder>(R.layout.item_post), LoadMoreModule {
+class PostsAdapter : BaseQuickAdapter<Post, PostsAdapter.ViewHolder>(R.layout.item_post), LoadMoreModule {
 
     class ViewHolder(itemView: View) : BaseViewHolder(itemView) {
         val content: TextView = itemView.findViewById(R.id.content)
@@ -73,12 +75,29 @@ class Adapter : BaseQuickAdapter<Post, Adapter.ViewHolder>(R.layout.item_post), 
                         }
                     }, start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                 } else {
-                    // TODO 内部链接跳转activity
                     html.setSpan(object : ClickableSpan() {
                         override fun onClick(widget: View) {
-                            Toast.makeText(context, "test url: $url", Toast.LENGTH_SHORT).show()
-                            //                                    val intent = Intent(context, UserSpace::class.java)
-                            //                                    context.startActivity(intent)
+                            // 用户空间 (https://pianyu.org/u/20)
+                            val p = Pattern.compile("https?://pianyu\\.org/u/(\\d+)\$")
+                            val m = p.matcher(url)
+                            if (m.find()) {
+                                val intent = Intent(context, UserSpaceActivity::class.java)
+                                intent.putExtra("ID", m.group(1))
+                                context.startActivity(intent)
+                                return
+                            }
+                            // 讨论 (https://pianyu.org/d/63/11)
+                            val p2 = Pattern.compile("https?://pianyu\\.org/d/(\\d+)(-[A-Za-z\\d-])*/(\\d+)\$")
+                            val m2 = p2.matcher(url)
+                            if (m2.find()) {
+                                val intent = Intent(context, DiscussionActivity::class.java)
+                                intent.putExtra("ID", m2.group(1))
+                                intent.putExtra("NUMBER", m2.group(3)) // TODO: 讨论页自动跳转到指定楼层
+                                context.startActivity(intent)
+                                return
+                            }
+
+                            Toast.makeText(context, "unknown url: $url", Toast.LENGTH_SHORT).show()
                         }
                     }, start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                 }
@@ -87,15 +106,16 @@ class Adapter : BaseQuickAdapter<Post, Adapter.ViewHolder>(R.layout.item_post), 
 
         holder.content.text = html
         holder.content.movementMethod = LinkMovementMethod.getInstance()
-        holder.title.text = item.username
+        holder.title.text = item.user!!.username
 
         // 加载头像
-        if (!StringUtil.isBlank(item.avatar)) {
-            ImageUtils.loadAvatar(item.avatar, holder.avatar, holder.itemView, context)
-        } else {
-            ImageUtils.setDefaultAvatar(holder.avatar, context)
+        ImageUtils.loadAvatar(item.user!!.avatarUrl, holder.avatar, context)
+        // 跳转用户详情页
+        holder.avatar.setOnClickListener {
+            val intent = Intent(context, UserSpaceActivity::class.java)
+            intent.putExtra("ID", item.userId)
+            context.startActivity(intent)
         }
-
     }
 
 }

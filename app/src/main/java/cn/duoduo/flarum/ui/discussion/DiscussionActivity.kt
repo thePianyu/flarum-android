@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cn.duoduo.flarum.R
+import cn.duoduo.flarum.adapter.PostsAdapter
 import cn.duoduo.flarum.databinding.ActivityDiscussionBinding
 import cn.duoduo.flarum.network.RetrofitClient
 import cn.duoduo.flarum.viewmodel.DiscussionViewModel
@@ -36,7 +37,7 @@ class DiscussionActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val adapter = Adapter()
+        val adapter = PostsAdapter()
         adapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.AlphaIn)
 
         // 加载更多
@@ -44,10 +45,8 @@ class DiscussionActivity : AppCompatActivity() {
             model.fetchPosts(offset)
         }
 
-        // 设置标题
+        // header
         val view = layoutInflater.inflate(R.layout.item_post_header, binding.recyclerView, false)
-        val title = intent.getStringExtra("discussionTitle")!!
-        view.findViewById<TextView>(R.id.title_discussion).text = title
         adapter.addHeaderView(view)
 
         binding.recyclerView.adapter = adapter
@@ -56,6 +55,8 @@ class DiscussionActivity : AppCompatActivity() {
         model.fetchDiscussion(intent.getStringExtra("ID")!!)
 
         model.getDiscussion().observe(this) {
+            // 设置标题
+            view.findViewById<TextView>(R.id.title_discussion).text = it.attributes.title
             model.fetchPosts(offset)
         }
 
